@@ -28,6 +28,14 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+@app.errorhandler(500)
+def internal_error(error):
+    return f"500 error: {error}", 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return f"404 error: {error}", 404
+
 # Маршрут для страницы входа
 @app.route('/login', methods=['GET', 'POST'])
 def login():
