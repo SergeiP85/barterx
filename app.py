@@ -5,9 +5,15 @@ from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import os  # Импортируем os для работы с путями
 
-app = Flask(__name__, template_folder=os.path.join(os.getcwd(), 'templates'))  # Указываем путь к папке с шаблонами
+# Указываем путь к папке с шаблонами
+app = Flask(__name__, template_folder=os.path.join(os.getcwd(), 'templates')) 
 
-app = Flask(__name__)
+# или, если хотите оставить это стандартным способом:
+# app = Flask(__name__)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 app.secret_key = 'your_secret_key'  # Секретный ключ для сессий
 
 # Настройка Flask-Mail
