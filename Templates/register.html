@@ -7,6 +7,18 @@
 </head>
 <body>
     <h1>Регистрация</h1>
+    
+    <!-- Вывод флеш-сообщений -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
     <form method="POST">
         <label for="username">Имя пользователя:</label>
         <input type="text" name="username" id="username" required>
@@ -26,10 +38,6 @@
         <button type="submit">Зарегистрироваться</button>
     </form>
     
-    
-    
     <a href="{{ url_for('login') }}">Уже есть аккаунт? Войти</a>
 </body>
 </html>
-
-

@@ -48,46 +48,56 @@ def login():
 
     return render_template('login.html')
 
-# Маршрут для регистрации (ДОБАВЛЕН)
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        # Получаем данные из формы
         username = request.form['username']
         email = request.form['email']
-        password = generate_password_hash(request.form['password'])
-
+        password = request.form['password']
+        city = request.form['city']
+        contact = request.form['contact']
+        
+        # Хешируем пароль
+        password_hash = generate_password_hash(password)
+        
+        # Подключение к базе данных
         conn = get_db()
         cursor = conn.cursor()
+        
         try:
-            cursor.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', 
-                           (username, email, password))
+            # Проверка на наличие пользователя с таким же именем или email
+            cursor.execute('SELECT * FROM users WHERE LOWER(username) = LOWER(?) OR LOWER(email) = LOWER(?)', 
+                           (username, email))
+            existing_user = cursor.fetchone()
+
+            if existing_user:
+                flash('Пользователь с таким именем или email уже существует!', 'error')
+                print(f"Пользователь с таким именем или email уже существует: {existing_user}")  # Отладочное сообщение
+                return redirect(url_for('register'))
+
+            # Вставка нового пользователя в базу данных
+            cursor.execute('INSERT INTO users (username, email, password, city, contact) VALUES (?, ?, ?, ?, ?)', 
+                           (username, email, password_hash, city, contact))
             conn.commit()
+
+            # Отладочные сообщения для проверки выполнения запроса
+            print(f"Пользователь {username} успешно добавлен в базу данных.")
+            
+            # Закрытие соединения
+            conn.close()
+
             flash('Регистрация успешна! Войдите в систему.', 'success')
             return redirect(url_for('login'))
-        except sqlite3.IntegrityError:
-            flash('Ошибка: такой пользователь уже существует.', 'error')
-        finally:
+        
+        except sqlite3.Error as e:
+            flash(f'Ошибка базы данных: {e}', 'error')
+            print(f"Ошибка при работе с базой данных: {e}")  # Отладочное сообщение
             conn.close()
 
     return render_template('register.html')
 
-# Маршрут для главной страницы 
-# @app.route('/')
-# def index():
-#     # Проверяем, авторизован ли пользователь
-#     if 'user_id' not in session:
-#         return redirect(url_for('login'))  # Перенаправляем на страницу входа, если пользователь не авторизован
 
-#     # Получаем флаг выхода из сессии, чтобы ограничить доступ
-#     logged_out = session.get('logged_out', False)  # Если пользователь только что вышел, этот флаг будет True
-
-#     conn = get_db()
-#     cursor = conn.cursor()
-#     cursor.execute('SELECT * FROM items')
-#     items = cursor.fetchall()
-#     conn.close()
-
-#     return render_template('index.html', items=items, logged_out=logged_out)
 
 @app.route('/')
 def index():
@@ -223,6 +233,21 @@ def reset_password(token):
         return redirect(url_for('login'))
 
     return render_template('reset_password.html', token=token)
+
+@app.route('/delete_item/<int:item_id>', methods=['POST'])
+def delete_item(item_id):
+    conn = get_db()
+    product = conn.execute('SELECT * FROM items WHERE id = ?', (item_id,)).fetchone()
+    
+    if product:  # Проверяем, существует ли товар
+        conn.execute('DELETE FROM items WHERE id = ?', (item_id,))
+        conn.commit()
+        flash('Товар успешно удален', 'success')
+
+    conn.close()
+    return redirect(url_for('index'))
+
+ 
 
 if __name__ == '__main__':
     app.run(debug=True)
