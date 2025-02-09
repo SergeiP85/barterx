@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #0044cc;
+    color: white;
+    margin: 0;
+}
+
+.logout-btn {
+    background-color: #0044cc; /* Красный цвет для выделения */
+    color: white; /* Белый текст */
+    border: none; /* Без рамки */
+    padding: 10px 20px; /* Внутренние отступы для удобства */
+    font-size: 16px; /* Размер текста */
+    border-radius: 5px; /* Скругленные углы */
+    cursor: pointer; /* Указатель мыши при наведении */
+    transition: background-color 0.3s, transform 0.2s; /* Плавные переходы для фона и эффекта нажатия */
+}
+
+.logout-btn:hover {
+    background-color: #FF2C2C; /* Темный красный при наведении */
+}
+
+.logout-btn:active {
+    transform: scale(0.98); /* Легкое уменьшение размера при нажатии */
+}

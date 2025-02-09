@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактировать товар</title>
+</head>
+<body>
+    <h1>Редактировать товар</h1>
+    <a href="{{ url_for('index') }}">Назад на главную</a>
+
+    <form action="{{ url_for('edit_item', item_id=item[0]) }}" method="POST">
+        <label for="title">Название товара:</label>
+        <input type="text" id="title" name="title" value="{{ item[1] }}" required><br><br>
+
+        <label for="description">Описание:</label>
+        <textarea id="description" name="description" required>{{ item[2] }}</textarea><br><br>
+
+        <label for="contact">Контакт:</label>
+        <input type="text" id="contact" name="contact" value="{{ item[4] }}" required><br><br>
+
+        <label for="city">Город:</label>
+        <input type="text" id="city" name="city" value="{{ item[5] }}" required><br><br>
+
+        <label for="image_url">Ссылка на изображение:</label>
+        <input type="url" id="image_url" name="image_url" value="{{ item[3] }}"><br><br>
+
+        <button type="submit">Сохранить изменения</button>
+    </form>
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>

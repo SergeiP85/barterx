@@ -1,0 +1,73 @@
+.card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+}
+
+.card-body h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0 0 10px;
+}
+
+.card-body p {
+    font-size: 1rem;
+    color: #555;
+    margin: 10px 0;
+}
+
+.card-body .contact, .card-body .city {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #0044cc; /* Синий фон */
+    color: white; /* Белый текст */
+    padding: 10px 20px; /* Внутренние отступы */
+    text-decoration: none; /* Убираем подчеркивание у ссылки */
+    border-radius: 5px; /* Скругленные углы */
+    margin-top: 10px; /* Отступ сверху */
+    text-align: center; /* Выравнивание текста по центру */
+    transition: background-color 0.3s, transform 0.2s; /* Плавные переходы для фона и эффекта нажатия */
+}
+
+.btn:hover {
+    background-color: #a2aa00; /* Темный синий при наведении */
+}
+
+.btn:active {
+    transform: scale(0.98); /* Легкое уменьшение размера при нажатии */
+}
+
+
+.edit-btn {
+    display: inline-block;
+    background-color: #ff6600;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.edit-btn:hover {
+    background-color: #cc5200;
+}
