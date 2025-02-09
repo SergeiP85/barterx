@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash 
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
@@ -8,13 +8,8 @@ import os  # Импортируем os для работы с путями
 # Указываем путь к папке с шаблонами
 app = Flask(__name__, template_folder=os.path.join(os.getcwd(), 'templates')) 
 
-# или, если хотите оставить это стандартным способом:
-# app = Flask(__name__)
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
-app.secret_key = 'your_secret_key'  # Секретный ключ для сессий
+# Секретный ключ для сессий
+app.secret_key = os.urandom(24).hex()  # Генерация случайного секретного ключа
 
 # Настройка Flask-Mail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -33,9 +28,7 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
-
-
-# Маршрут для страницы входа (ДОБАВЛЕН)
+# Маршрут для страницы входа
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
