@@ -3,6 +3,9 @@ import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
+import os  # Импортируем os для работы с путями
+
+app = Flask(__name__, template_folder=os.path.join(os.getcwd(), 'templates'))  # Указываем путь к папке с шаблонами
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Секретный ключ для сессий
