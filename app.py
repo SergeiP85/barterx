@@ -220,6 +220,41 @@ def reset_password(token):
     # Отображение страницы сброса пароля
     return render_template('reset_password.html')
 
+
+# Страница личного кабинета пользователя
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))  # Если пользователь не залогинен, перенаправить на страницу входа
+
+    user_id = session['user_id']
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Получаем все товары пользователя
+    items = cursor.execute('SELECT * FROM items WHERE user_id = ?', (user_id,)).fetchall()
+
+    # Обработка редактирования личной информации
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        contact = request.form['contact']
+        city = request.form['city']
+
+        cursor.execute('''UPDATE users
+                          SET username = ?, email = ?, contact = ?, city = ?
+                          WHERE id = ?''', (username, email, contact, city, user_id))
+        conn.commit()
+        flash('Информация успешно обновлена!', 'success')
+        return redirect(url_for('profile'))
+
+    # Получаем информацию о пользователе для отображения в форме
+    user_info = cursor.execute('SELECT username, email, contact, city FROM users WHERE id = ?', (user_id,)).fetchone()
+
+    conn.close()
+    return render_template('profile.html', items=items, user_info=user_info)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
